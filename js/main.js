@@ -1,16 +1,13 @@
 var photos = 25;
 
-//--------------------------------------находим шаблон-------------------------------
-var teamplateUser = document.querySelector('#picture').content.querySelector('.picture');
-
 //--------------------------------------масив с коментариями-------------------------------
 var commentsArray = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
-    'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто               непрофессионально.',
+    'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
     'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-    'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография        лучше.',
-    'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный        момент?!'
+    'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+    'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
 //--------------------------------------масив с именами-------------------------------
@@ -33,77 +30,89 @@ var svgArray = [
     'avatar-6.svg'
 ];
 
+
+//------------------------функция генерации рандомного числа-------------------------------
+function getRandomInRangeNamber(min, max){
+
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+
+
 //--------------------------------------рандомное svg(аватарка)-------------------------------
-var randomNamberSvg = function getRandomInRangeSvg(min, max){
+var randomNamberSvg = getRandomInRangeNamber(1, svgArray.length);
+var randomSvg = svgArray[randomNamberSvg];
 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  getRandomInRangeSvg = (1, svgArray.length)
-  
+
+
 //--------------------------------------рандомное имя пользователя-------------------------------
-var randomNamberName = function getRandomInRangeName(min, max){
+var randomNamberName = getRandomInRangeNamber(1, namesArray.length);
+var randomName = namesArray[randomNamberName];
 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  getRandomInRangeName = (1, namesArray.length)
 
-//--------------------------------------рандомный номер url-------------------------------
-for(var z = 0; z < photos; z++){
-    var randomNamberUrl = z;
-}
 
 //--------------------------------------рандомное кол-во лайков-------------------------------
-var randomNamberLikes = function getRandomInRangeLikes(min, max){
+var randomNamberLikes = getRandomInRangeNamber(15, 200);
+console.info(randomNamberLikes);
 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-getRandomInRangeLikes = (15, 200)
-
-//--------------------------------------рандомный коментарий-------------------------------
-var randomNamberComments = function getRandomInRangeComments(min, max){
-
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-getRandomInRangeComments = (1, commentsArray.length)
-
-//----------------------рандомное кол-во коментариев под одной фото------------------------ 
+//----------------------рандомное кол-во коментариев под одной фото------------------------
 var message = function(){
-     for(var y = 0; y < randomNamberComments; y++){
-        var getRandomInRangeQuantityComments = commentsArray[randomNamberComments];
-    }
-    message = getRandomInRangeQuantityComments;
-    return 
-}
+    message = [];
+    for(var i = 0; i < 2; i++){
+       var randomNamberComments = getRandomInRangeNamber(1, commentsArray.length);
+       var randomComments = commentsArray[randomNamberComments];
+       message[i] = randomComments;
+    };
+   return message;
+};
+//console.info(message());
+
+
 
 //--------------------------------------генерация обьектов(фото) с разными данными---------- 
-for(var i = 0; i < photos; i++){
-    var generationObject = function(){
-        var photoArray = {
-            url: "photos/"+randomNamberUrl+".jpg",
-            likes: randomNamberLikes,
-            comments: {
-                avatar: "img/"+randomNamberSvg,
-                message: message,
-                name: randomNamberName,
-              }
+function generationObject(index, randomNamberLikes, randomSvg, randomName, message){
+    var photoArray = {
+        url: 'photos/' + index + '.jpg',
+        likes: randomNamberLikes,
+        comments: {
+            avatar: 'img/' + randomSvg,
+            message: message,
+            name: randomName,
         }
-        return photoArray
     };
+    return photoArray;  
+};
 
+for(var i = 0; i < photos; i++) {
+    //-------------номер url, likes,comments--------------------------------------------
+    var photoPost = generationObject(i + 1 , getRandomInRangeNamber(15, 200) , 
+    svgArray[getRandomInRangeNamber(1, svgArray.length)] ,
+     namesArray[getRandomInRangeNamber(1, namesArray.length)] , message);
+    console.info(photoPost);
+
+
+    //--------------------------------------находим шаблон-------------------------------
+    var teamplateUser = document.querySelector('#picture').content.querySelector('.picture');
     //--------------------------------------копируем шаблон-------------------------------
     var photoElement = teamplateUser.cloneNode(true);
 
+
+
     //--------------------подстовляем данные в скопированные шаблоны-----------------------------
-    var createObject = function(){
-        photoElement.getElementsByTagName(img).setAttribute("src", photoArray.url);
-        photoElement.querySelector('.picture__likes').textContent = photoArray.likes;
-        photoElement.querySelector('.picture__comments').textContent = photoArray.comments;
-        return photoElement
-    };
+    photoElement.querySelector('.picture__img').setAttribute('src', photoPost.url);
+    photoElement.querySelector('.picture__likes').textContent = photoPost.likes;
+    photoElement.querySelector('.picture__comments').textContent = photoPost.comments;
+    //console.info(photoElement);
+
+
+
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(photoElement);
     //------------------------подстовляем заполненные шаблоны на сайт-------------------------------
     var pictures = document.querySelector('.pictures');
-    pictures.documentFragments(createObject);
-}
+    pictures.appendChild(fragment);
+};
+
 
 
 
