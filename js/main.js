@@ -1,5 +1,8 @@
 var photos = 25;
 
+// находим шаблон
+var teamplateUser = document.querySelector('#picture').content.querySelector('.picture');
+
 // масив с коментариями
 var commentsArray = [
     'Всё отлично!',
@@ -31,85 +34,90 @@ var svgArray = [
 ];
 
 // функция генерации рандомного числа
-function getRandomInRangeNamber(min, max) {
+function getRandomInRangeNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Генерация рандомных коментарий(message)
-function message(){
+function generateCommentMessage() {
     messageArray = [];
+
     for(var i = 0; i < 2; i++){
-       var randomNamberComments = getRandomInRangeNamber(1, commentsArray.length);
-       var randomComments = commentsArray[randomNamberComments];
+       var randomNumberComments = getRandomInRangeNumber(1, commentsArray.length);
+       var randomComments = commentsArray[randomNumberComments];
        messageArray[i] = randomComments;
     };
    return messageArray;
 }
 
-
 // Масив коментарий
-function getComments(count) {
+function getPhotoPostComments(count) {
     var comments = [];
 
     for(var i = 0; i < count; i++) {
+        
+        // рандомное svg(аватарка)
+        var randomNumberUserSvg = getRandomInRangeNumber(1, svgArray.length);
+        var userAvatarImageName = svgArray[randomNumberUserSvg];
+
+        // рандомное имя пользователя
+        var randomNumberUserName = getRandomInRangeNumber(1, namesArray.length);
+        var userName = namesArray[randomNumberUserName];
+
         comments.push({
-             avatar: "img/" + randomSvg,
-             message: message(),
-             name: randomName
+             avatar: "img/" + userAvatarImageName,
+             message: generateCommentMessage(),
+             name: userName
         });
     };
     return comments;
 }
 
 // генерация обьектов(фото) с разными данными
-function generationObject(index, randomNamberLikes, commentsArray) {
+function generatePhotoPostObject(numberUserUrlAdress, quantityLikes, comments) {
     var photoArray = {
-        url: 'photos/' + index + '.jpg',
-        likes: randomNamberLikes,
-        comments: commentsArray
+        url: 'photos/' + numberUserUrlAdress + '.jpg',
+        likes: quantityLikes,
+        comments: comments
     };
     return photoArray;  
 }
 
 for(var i = 0; i < photos; i++) {
-    // рандомное svg(аватарка
-    var randomNamberSvg = getRandomInRangeNamber(1, svgArray.length);
-    var randomSvg = svgArray[randomNamberSvg];
-
-    // рандомное имя пользователя
-    var randomNamberName = getRandomInRangeNamber(1, namesArray.length);
-    var randomName = namesArray[randomNamberName];
-
-    // рандомное кол-во лайков
-    var randomNamberLikes = getRandomInRangeNamber(15, 200);
-
-    // номер url, likes,comments
-    var photoPost = generationObject(i + 1 , randomNamberLikes , getComments(getRandomInRangeNamber(1, 20)));
+    // подстовляем значения url, likes, comments
+    var photoPost = generatePhotoPostObject(i + 1 , photoPostLikes , getPhotoPostComments(getRandomInRangeNumber(1, 20)));
     console.info(photoPost);
 
-    // находим шаблон
-    var teamplateUser = document.querySelector('#picture').content.querySelector('.picture');
+    // рандомное кол-во лайков
+    var photoPostLikes = getRandomInRangeNumber(15, 200);
 
+    addDataToCopiedTemplates();
+    addTemplatesToSite();
+};
+
+// подстовляем данные в скопированные шаблоны
+function addDataToCopiedTemplates() {
     // копируем шаблон
     var photoElement = teamplateUser.cloneNode(true);
 
-    // подстовляем данные в скопированные шаблоны
     photoElement.querySelector('.picture__img').setAttribute('src', photoPost.url);
     photoElement.querySelector('.picture__likes').textContent = photoPost.likes;
     photoElement.querySelector('.picture__comments').textContent = photoPost.comments.length;
-    console.info(photoElement);
+
+    return photoElement;
+}
+
+// подстовляем заполненные шаблоны на сайт
+function addTemplatesToSite() {
 
     var fragment = document.createDocumentFragment();
-    fragment.appendChild(photoElement);
+    fragment.appendChild(addDataToCopiedTemplates());
 
-    // подстовляем заполненные шаблоны на сайт
     var pictures = document.querySelector('.pictures');
     pictures.appendChild(fragment);
-};
 
-
-
-
+    return fragment
+}
 
 
 
