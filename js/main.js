@@ -85,6 +85,7 @@ for(var i = 0; i < photos; i++) {
 
     // номер url, likes,comments
     var photoPost = generationObject(i + 1 , randomNamberLikes , getComments(getRandomInRangeNamber(1, 20)));
+    console.info(photoPost);
 
     // находим шаблон
     var teamplateUser = document.querySelector('#picture').content.querySelector('.picture');
