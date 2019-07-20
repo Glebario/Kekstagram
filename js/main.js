@@ -1,4 +1,4 @@
-var photos = 25;
+var photos = 26;
 
 // находим шаблон
 var teamplateUser = document.querySelector('#picture').content.querySelector('.picture');
@@ -86,7 +86,7 @@ function generatePhotoPostObject(numberUserUrlAdress, quantityLikes, comments) {
 for(var i = 0; i < photos; i++) {
     // подстовляем значения url, likes, comments
     var photoPost = generatePhotoPostObject(i + 1 , photoPostLikes , getPhotoPostComments(getRandomInRangeNumber(1, 20)));
-    console.info(photoPost);
+    //console.info(photoPost);
 
     // рандомное кол-во лайков
     var photoPostLikes = getRandomInRangeNumber(15, 200);
@@ -119,6 +119,26 @@ function addTemplatesToSite() {
     return fragment
 }
 
+//-----------------------------------------------------------------------------------------------------
+// событие: нажатие на кнопку загрузки фото
+var downloadButton = document.getElementById('upload-file');
+var photoEditor = document.querySelector('.img-upload__overlay');
+var closePhotoEditor = document.getElementById('upload-cancel');
 
+var openPopupPhotoEditor = function() {
+    photoEditor.classList.remove('hidden');
+    return photoEditor;
+};
 
+var closePopupPhotoEditor = function() {
+    photoEditor.classList.add('hidden');
+    return photoEditor;
+};
+downloadButton.addEventListener('change', openPopupPhotoEditor);
 
+closePhotoEditor.addEventListener('click', closePopupPhotoEditor);
+photoEditor.addEventListener('keydown', function(evt) {
+    if (evt.KeyCode === 27) {
+        closePopupPhotoEditor();
+    }
+});
