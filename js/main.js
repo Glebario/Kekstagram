@@ -125,11 +125,13 @@ var downloadButton = document.getElementById('upload-file');
 var photoEditor = document.querySelector('.img-upload__overlay');
 var closePhotoEditor = document.getElementById('upload-cancel');
 
+// открытие фоторедактора
 var openPopupPhotoEditor = function() {
     photoEditor.classList.remove('hidden');
     return photoEditor;
 };
 
+// закрытие фоторедактора
 var closePopupPhotoEditor = function() {
     photoEditor.classList.add('hidden');
     return photoEditor;
@@ -142,3 +144,23 @@ photoEditor.addEventListener('keydown', function(evt) {
         closePopupPhotoEditor();
     }
 });
+
+// событие: изменения уровня фильтра
+var levelFilter = photoEditor.querySelector('.effect-level__pin');
+
+
+//событие: выбор фильтра
+var choiceFilter = photoEditor.querySelector('.effects__radio');
+
+
+// событие: картинка для операции с фильтрами
+var choiceFoto = photoEditor.querySelector('.img-upload__preview');
+var choiceFotoImg = choiceFoto.getElementsByTagName('img');
+
+
+var preview = function(){
+    choiceFotoImg.classList.add('effects__preview--chrome');
+    return choiceFotoImg;
+};
+console.info(preview());
+choiceFilter.addEventListener('click', preview);
