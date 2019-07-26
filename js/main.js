@@ -144,6 +144,8 @@ photoEditor.addEventListener('keydown', function(evt) {
         closePopupPhotoEditor();
     }
 });
+console.info(photoEditor);
+
 
 // событие: изменения уровня фильтра
 var levelFilter = photoEditor.querySelector('.effect-level__pin');
@@ -152,15 +154,29 @@ var levelFilter = photoEditor.querySelector('.effect-level__pin');
 //событие: выбор фильтра
 var choiceFilter = photoEditor.querySelector('.effects__radio');
 
+// событие: фильтры:
+var original = choiceFilter.querySelector('.effect-none');
+var chrome = choiceFilter.querySelector('.effect-chrome');
+var sepia = choiceFilter.querySelector('.effect-sepia');
+var marvin = choiceFilter.querySelector('.effect-marvin');
+var phobos = choiceFilter.querySelector('.effect-phobos');
+var heat = choiceFilter.querySelector('.effect-heat');
 
 // событие: картинка для операции с фильтрами
 var choiceFoto = photoEditor.querySelector('.img-upload__preview');
 var choiceFotoImg = choiceFoto.getElementsByTagName('img');
 
-
-var preview = function(){
-    choiceFotoImg.classList.add('effects__preview--chrome');
+// событие: подстановка фильтра в картинку
+var preview = function(filter){
+    choiceFotoImg.classList.add("'" + filter + "'");
     return choiceFotoImg;
 };
-console.info(preview());
-choiceFilter.addEventListener('click', preview);
+
+original.addEventListener('click', preview.bind(evteffects__preview--none));
+chrome.addEventListener('click', preview.bind(effects__preview--chrome));
+sepia.addEventListener('click', preview.bind(effects__preview--sepia));
+marvin.addEventListener('click', preview.bind(effects__preview--marvin));
+phobos.addEventListener('click', preview.bind(effects__preview--phobos));
+heat.addEventListener('click', preview.bind(effects__preview--heat));
+
+
