@@ -81,7 +81,7 @@ function generatePhotoPostObject(numberUserUrlAdress, quantityLikes, comments) {
         comments: comments
     };
     return photoArray;  
-}
+};
 
 for(var i = 0; i < photos; i++) {
     // подстовляем значения url, likes, comments
@@ -167,16 +167,36 @@ var choiceFoto = photoEditor.querySelector('.img-upload__preview');
 var choiceFotoImg = choiceFoto.getElementsByTagName('img');
 
 // событие: подстановка фильтра в картинку
-var preview = function(filter){
-    choiceFotoImg.classList.add("'" + filter + "'");
+var preview = function(classFilter) {
+    choiceFotoImg.classList.add("'" + classFilter + "'");
     return choiceFotoImg;
 };
 
-original.addEventListener('click', preview.bind(evteffects__preview--none));
-chrome.addEventListener('click', preview.bind(effects__preview--chrome));
-sepia.addEventListener('click', preview.bind(effects__preview--sepia));
-marvin.addEventListener('click', preview.bind(effects__preview--marvin));
-phobos.addEventListener('click', preview.bind(effects__preview--phobos));
-heat.addEventListener('click', preview.bind(effects__preview--heat));
+var filters = [
+    'none',
+    'chrome',
+    'sepia',
+    'marvin',
+    'phobos',
+    'heat'
+];
 
+function creatureClassFilter (nameFilter) {
+    var classFilter = 'effects__preview--' + nameFilter;
+    return classFilter;
+};
 
+for (var i = 0; i < filters.length; i++){
+    var classFilter = creatureClassFilter(filters[i]);
+    var preview = preview(classFilter);
+    preview.appendChild(events);
+};
+
+var events = [];
+
+original.addEventListener('click', events[0]);
+chrome.addEventListener('click',  events[1]);
+sepia.addEventListener('click', events[2]);
+marvin.addEventListener('click', events[3]);
+phobos.addEventListener('click', events[4]);
+heat.addEventListener('click', events[5]);
