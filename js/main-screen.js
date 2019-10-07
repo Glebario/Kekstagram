@@ -165,5 +165,109 @@ var errorHandler = function (errorMessage) {
     document.body.insertAdjacentElement('afterbegin', node);
 };
   
-window.load(url, successHandler, errorHandler);
+//window.load(url, successHandler, errorHandler);
+
+
+
+//--------------------------------------------ФИЛЬТРЫ-------------------------------------------
+var filters = document.querySelector('.img-filters');
+filters.classList.remove('img-filters--inactive')
+
+var filterPopular = filters.querySelector('#filter-popular');
+var filterNew = filters.querySelector('#filter-new');
+var filterDiscussed = filters.querySelector('#filter-discussed');
+
+filterPopular.classList.remove('img-filters__button--active');
+
+//смена кнопки фильтра
+let selectedBtn;
+
+filters.onclick = function(event) {
+  let target = event.target; // где был клик?
+  if (target.tagName != 'BUTTON') return; // не на TD? тогда не интересует
+
+  highlight(target); // подсветить TD
+};
+function highlight(btn) {
+  if (selectedBtn) { // убрать существующую подсветку, если есть
+    selectedBtn.classList.remove('img-filters__button--active');
+  }
+  selectedBtn = btn;
+  selectedBtn.classList.add('img-filters__button--active'); // подсветить новый td
+};
+
+//удаление постов(фото) при смене фильтра
+function removePostCard(){
+    var postContainer = document.querySelector('.pictures');
+
+    //console.info(postContainer);
+    while(postContainer.children[2]){
+        //console.info(postContainer.children[2]);
+        //--------------------------------------проверить-------------------------
+        postContainer.removeChild(postContainer.children[2]);
+    };
+    return postContainer
+};
+
+//новые посты
+var successHandlerNew = function (data) {
+    //console.log(data);
+    var fragment = document.createDocumentFragment();
+    
+    var filtered = data.sort(function(){
+        return Math.random() - 0.5;
+    }).slice(0, 10);
+    //console.log(filtered);
+
+    for (var i = 0; i < filtered.length; i++) {
+    fragment.appendChild(addDataToCopiedTemplates(filtered[i]));
+    };
+
+    var pictures = document.querySelector('.pictures');
+    pictures.appendChild(fragment);
+};
+
+//обсуждаемые посты
+var successHandlerDiscussed = function (data) {
+    var fragment = document.createDocumentFragment();
+    var filtered = data.sort(function(a, b){
+        var c = a.comments,
+            d = b.comments;
+    
+        if( c < d ){
+            return -1;
+        }else if( c > d ){
+            return 1;
+        };
+        return 0;
+    }).reverse();
+    
+    for(var i in data){
+        console.log(data[i]); 
+    };
+    
+    for (var i = 0; i < filtered.length; i++) {
+    fragment.appendChild(addDataToCopiedTemplates(filtered[i]));
+    };
+
+    var pictures = document.querySelector('.pictures');
+    pictures.appendChild(fragment);
+};
+
+//обработчики событий фильтров
+
+    filterPopular.addEventListener('click', function(event){
+        removePostCard();
+        window.load(url, successHandler, errorHandler);
+    })
+    filterNew.addEventListener('click', function(event){
+        removePostCard();
+        window.load(url, successHandlerNew, errorHandler);
+    })
+    filterDiscussed.addEventListener('click', function(event){
+        removePostCard();
+        window.load(url, successHandlerDiscussed, errorHandler);
+    })
+
 })();
+ 
