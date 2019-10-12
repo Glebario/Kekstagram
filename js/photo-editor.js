@@ -54,14 +54,17 @@
 
     var levelFilterElement = photoEditor.querySelector('.effect-level__pin');
     var levelFilter = photoEditor.querySelector('.effect-level__line');
+    var levelFilterDepth = photoEditor.querySelector('.effect-level__depth');
      //определение начала кординат слайдера
-    var originСordinatsSlider = getCoords(levelFilter);
     //console.log(originСordinatsSlider.top);
     //console.log(originСordinatsSlider.left);
+    
 
     (function sliderFilter (){
         levelFilter.addEventListener('mousedown', function (evt) {
         evt.preventDefault();
+        var originСordinatsSlider = getCoords(levelFilter);
+        console.log(originСordinatsSlider);
 
         var startCoords = {
         x: evt.clientX,
@@ -74,13 +77,16 @@
         var shift = {
             x: startCoords.x - moveEvt.clientX
         };
-        
+
         startCoords = {
             x: moveEvt.clientX,
             y: moveEvt.clientY
         };
-        
-        levelFilterElement.style.left = (levelFilterElement.offsetLeft - shift.x) + 'px';
+
+        if(levelFilterElement.offsetLeft - shift.x <= 450 && levelFilterElement.offsetLeft - shift.x >= 0){
+            levelFilterElement.style.left = (levelFilterElement.offsetLeft - shift.x) + 'px';
+            levelFilterDepth.style.width = (levelFilterElement.offsetLeft - shift.x) + 'px';
+        };
         };
 
         var onMouseUp = function (upEvt) {
@@ -103,6 +109,6 @@
         top: box.top + pageYOffset,
         left: box.left + pageXOffset
         };
-    
     };
+    
 })();
